@@ -35,24 +35,20 @@ const Home = () => {
     const joinRoom = () => {
 
         // Validation
-
         if(!roomId || !username){
             toast.error('ROOM ID and Username required', {
             style: {
-                //  border: '1px solid #713200',
                  padding: '16px',
                  background: '#eee',
                  color: 'black',
                  fontWeight: 'bold',
                  borderRadius: '100px',
-                //  borderShadow: ['10px', '10px', 'white']
                 },
             iconTheme: {
                   primary : 'red' ,
                  secondary: '#FFFAEE',
                  },
             }) ;
-
             return ;
         }
 
@@ -74,7 +70,7 @@ const Home = () => {
   return (
     <div className = "homePageWrapper">
         <div className="formWrapper">
-            <img className = "homePageLogo"src="https://rubylazaro.files.wordpress.com/2014/02/livecode-110dpi.png" alt="mock-code logo" />
+            <img className = "homePageLogo"src="https://rubylazaro.files.wordpress.com/2014/02/livecode-110dpi.png" alt="Logo" />
             <h4 className="mainLabel">Paste invitation ROOM ID</h4>
             <div className="inputGroup">
                 <input 

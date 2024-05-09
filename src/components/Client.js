@@ -1,7 +1,11 @@
 import React from 'react' ;
 import Avatar from 'react-avatar' ;
 
-// need to destructure the object received in the arguement
+/**
+ * 
+ * @param {*} param0 
+ * @returns 
+ */
 const Client = ({username}) => {
   return (
     <div className='client'>

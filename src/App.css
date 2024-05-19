@@ -1,15 +1,16 @@
-body{
+body {
   background-color: #000000;
-background-image: url("https://www.transparenttextures.com/patterns/black-thread-light.png");
-/* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+  /* background-image: url("https://www.transparenttextures.com/patterns/black-thread-light.png"); */
+  /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
 }
+
 .homePageWrapper {
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
   height: 100vh;
- 
+
 }
 
 .formWrapper {
@@ -49,7 +50,7 @@ footer a {
 
 .inputBox {
   padding: 10px;
-  
+
   border-radius: 5px;
   outline: none;
   border: none;
@@ -60,7 +61,7 @@ footer a {
 }
 
 .btn {
-  
+
   border: none;
   padding: 10px;
   border-radius: 5px;
@@ -69,7 +70,8 @@ footer a {
   cursor: pointer;
   transition: all 0.3s ease-in-out;
 }
-.enterButton{
+
+.enterButton {
   margin-top: 3%;
   display: flex;
   flex-direction: row;
@@ -79,10 +81,11 @@ footer a {
 .joinBtn {
   background: #4aed88;
   width: 100px;
-  
+
 }
 
-.joinBtn:hover , .leaveBtn:hover {
+.joinBtn:hover,
+.leaveBtn:hover {
   background: #2b824c;
 }
 
@@ -92,13 +95,14 @@ footer a {
 }
 
 .createNewBtn {
-  color:  #4aed88;
+  color: #4aed88;
   text-decoration: none;
   border-bottom: 1px solid #4aed88;
   transition: all 0.3s ease-in-out;
 }
 
-.createNewBtn:hover, footer a:hover {
+.createNewBtn:hover,
+footer a:hover {
   color: #405749;
   border-color: #2c4034;
 }
@@ -108,12 +112,13 @@ footer a {
 .mainWrap {
   display: grid;
   grid-template-columns: 230px 1fr;
-  height:  100vh;
+  height: 100vh;
+
 }
 
 .aside {
-  background: #000000;
-  padding:  16px;
+  background: #1a1e34;
+  padding: 16px;
   color: #fff;
   display: flex;
   flex-direction: column;
@@ -126,7 +131,7 @@ footer a {
 .clientsList {
   display: flex;
   align-items: center;
-  flex-wrap: wrap ;
+  flex-wrap: wrap;
   gap: 20px;
 }
 
@@ -148,7 +153,6 @@ footer a {
 }
 
 .logoImage {
-  
   width: 80%;
 }
 
@@ -157,20 +161,81 @@ footer a {
   background: #df1f1f;
   width: 100%;
 }
-.leaveBtn:hover{
+
+.leaveBtn:hover {
   background-color: #973131;
 }
 
-.copyBtn{
+.copyBtn {
   background-color: rgb(48, 48, 215);
 }
-.copyBtn:hover{
+
+.copyBtn:hover {
   background-color: rgb(51, 51, 129);
 }
 
-.CodeMirror {
-  min-height: calc(100vh - 20px);
-  font-size: 16px;
-  line-height: 1.4;
-  padding-top: 20px;
+
+
+/* New css */
+.editorWrap{
+  background-color: #1a1e34;
+}
+.editor-wrapper {
+  display: flex;
+}
+
+.editor-section {}
+
+.select-options {
+  margin: 20px
+}
+
+.editor {
+  width: 750px;
+  height: 500px;
+  margin: 20px;
+}
+
+.output-head h2 {
+  color: whitesmoke;
+}
+
+.output-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 43px;
+}
+
+.compile-btn {
+  background-color: #2bcb28;
+  border-radius: 5px;
+  padding: 2px 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.compile-btn:hover{
+  background-color: #6abd68;
+}
+
+.customInput {
+  width: 100%;
+  height: 100px;
+}
+
+.outputResult {
+  margin-bottom: 20px;
+  width: 100%;
+  height: 200px;
+  background-color: #292c30;
+  border-radius: 5px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #f8f8f2;
+}
+.outputDetails {
+  /* margin-top: 20px; */
+  font-size: 20px;
+  font-weight: 600;
+  color: #f8f8f2;
 }

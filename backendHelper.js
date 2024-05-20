@@ -1,27 +1,30 @@
-const CryptoJS = require("crypto-js");
+const { enc, AES, format } = require("crypto-js");
+
+REACT_APP_ENCRYPTION_KEY = "encryption-key"
+REACT_APP_ENCRYPTION_IV = "encryptionIV-key"
 
 /**
  * Encrypt input data
  * @param {string} data 
  */
-module.export.encryptData = function (data) {
-    const encryptionKey = CryptoJS.enc.Base64.parse(process.env.REACT_APP_ENCRYPTION_KEY);
-    const encryptionIV = CryptoJS.enc.Base64.parse(process.env.REACT_APP_ENCRYPTION_IV);
-    const wordArray = CryptoJS.enc.Utf16.parse(data);
+const encryptData = (data) => {
+    const encryptionKey = enc.Base64.parse(REACT_APP_ENCRYPTION_KEY);
+    const encryptionIV = enc.Base64.parse(REACT_APP_ENCRYPTION_IV);
+    const wordArray = enc.Utf16.parse(data);
 
-    return CryptoJS.AES.encrypt(wordArray, encryptionKey, { iv: encryptionIV }).toString(CryptoJS.format.Hex);
+    return AES.encrypt(wordArray, encryptionKey, { iv: encryptionIV }).toString(format.Hex);
 }
 
 /**
  * Decrypt received encrypted string
  * @param {string} data 
  */
-module.export.decryptData = function (data) {
+const decryptData = (data) => {
     if (!data) return data;
+    const encryptionKey = enc.Base64.parse(REACT_APP_ENCRYPTION_KEY);
+    const encryptionIV = enc.Base64.parse(REACT_APP_ENCRYPTION_IV);
 
-    const encryptionKey = CryptoJS.enc.Base64.parse(process.env.REACT_APP_ENCRYPTION_KEY);
-    const encryptionIV = CryptoJS.enc.Base64.parse(import.meta.env.REACT_APP_ENCRYPTION_IV);
-
-    return CryptoJS.AES.decrypt(CryptoJS.format.Hex.parse(data), encryptionKey, { iv: encryptionIV }).toString(CryptoJS.enc.Utf16);
+    return AES.decrypt(format.Hex.parse(data), encryptionKey, { iv: encryptionIV }).toString(enc.Utf16);
 }
 
+module.exports = { decryptData, encryptData }

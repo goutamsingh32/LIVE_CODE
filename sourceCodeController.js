@@ -1,5 +1,5 @@
-const { decryptData, encryptData }  = require('./src/utils/helper.js').default;
 
+const { decryptData, encryptData } = require('./backendHelper');
 
 const axios = require('axios');
 
@@ -13,8 +13,7 @@ const API_HOST = 'judge0-ce.p.rapidapi.com';
  * @param {import('express').Response} res 
  * @returns 
  */
-module.exports.codeSubmissionHandler = async (req, res) => {
-    console.log('req', req);
+const codeSubmissionHandler = async (req, res) => {
     try {
         if (!(req.body && Object.entries(req.body).filter(Boolean).length)) {
             return res.status(400).json({ status: 'failure', message: 'Invalid parameters - payload' });
@@ -23,17 +22,15 @@ module.exports.codeSubmissionHandler = async (req, res) => {
         /**
          * @type {{language_id: number, source_code: string, stdin: string, token}}
          */
-        const { language_id, source_code, stdin } = req.body;
+        const { language_id, source_code, stdin, token } = req.body;
+        const sourceCodeDecrypted = decryptData(source_code);
+        const tokenDecrypted = token ? decryptData(token) : null;
+        const stdinDecrypted = stdin ? decryptData(stdin) : null;
 
-        const sourceCodeDecrypted = source_code;
-        const tokenDecrypted = token ? token : null;
-        const stdinDecrypted = stdin ? stdin : null;
-        
 
         let apiTokenForSubmissionReq = null;
 
         if (!tokenDecrypted) {
-
             //API for create submission
             const data = await axios.default.request({
                 method: 'POST',
@@ -55,7 +52,6 @@ module.exports.codeSubmissionHandler = async (req, res) => {
         } else {
             apiTokenForSubmissionReq = tokenDecrypted;
         }
-        console.log('data',data);
 
         //API call for Get Submission
         const submissionsResponse = await axios.default.request({
@@ -68,14 +64,12 @@ module.exports.codeSubmissionHandler = async (req, res) => {
             }
         })
 
-        console.log("submissionsResponse", submissionsResponse);
         submissionsResponse.data['token'] = submissionsResponse.data['token'];
         return res.status(200).json({ status: 'succcess', message: 'Execution completed', data: submissionsResponse.data });
     } catch (error) {
         console.log('[codeSubmissionHandler]', error);
         return res.status(500).json({ status: 'failure', message: 'Internal server error', error: error.message });
     }
-
-
-
 }
+
+module.exports = { codeSubmissionHandler }

@@ -1,26 +1,25 @@
 import { decryptData, encryptData } from './utils/helper.js';
 import axios from 'axios';
 
-export const submitCode = async ({ language_id, sourceCode, stdin, token }) => {
+export const submitCode = async ({ language_id, source_code, stdin, token }) => {
   try {
     const payload = {
       language_id,
-      sourceCode: encryptData(sourceCode),
+      source_code: encryptData(source_code),
       stdin: stdin ? encryptData(stdin) : null,
-      token: token ? token : null
+      token: token ? encryptData(token) : null
     }
-    return await axios.request({
+    const resp = await axios.request({
       method: 'POST',
-      url: 'http://localhost:5000/compile:',
+      url: 'http://localhost:5000/compile',
       data: payload
     })
+    return resp;
   } catch (err) {
     console.log('[submitCode]', err);
     return null
   }
 }
-
-
 
 /**
  * Get data from localstorage (stored in encrypted format) 

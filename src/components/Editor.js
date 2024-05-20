@@ -96,6 +96,7 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
       source_code: code,
       stdin: customInput
     }
+    payload['token'] = null;
     if (existingRequestToken) {
       payload['token'] = existingRequestToken;
     }
@@ -227,7 +228,7 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
           <h2>Output</h2>
           <span
             className='compile-btn'
-            onClick={handleCodeCompile}
+            onClick={() => handleCodeCompile(null)}
           >
             Compile & Run
           </span>

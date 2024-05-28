@@ -5,7 +5,7 @@ import { initSocket } from '../socket';
 import { useLocation, useNavigate, Navigate, useParams } from 'react-router-dom';
 import ACTIONS from '../Actions';
 import toast from 'react-hot-toast';
-
+import { removeFromLocalStorage } from '../service';
 
 /**For Each client */
 const EditorPage = () => {
@@ -75,7 +75,6 @@ const EditorPage = () => {
     }
   }, []);
 
-
   /**Handle copy roomId action */
   async function copyRoomId() {
     try {
@@ -84,12 +83,15 @@ const EditorPage = () => {
 
     } catch (err) {
       toast.error('Oops! something went wrong');
-
     }
   }
 
   function leaveRoom() {
+    removeFromLocalStorage('theme');
+    removeFromLocalStorage('code');
+    removeFromLocalStorage('language');
     reactNavigator('/');
+
   }
 
   if (!location.state) {

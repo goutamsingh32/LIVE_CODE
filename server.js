@@ -2,7 +2,6 @@ const express = require('express');
 const http = require('http');
 const path = require('path');
 const { Server } = require('socket.io');
-const ACTIONS = require('./src/Actions');
 const socketHandler = require('./src/socket.handler');
 const { codeSubmissionHandler } = require('./sourceCodeController');
 const bodyParser = require('body-parser'); // Or use express.json() for JSON bodies
@@ -23,9 +22,9 @@ app.use(express.static('build'));
 app.use((req, res, next) => {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
 })
+
 // import & use socket-handler
 socketHandler(io);
-
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {

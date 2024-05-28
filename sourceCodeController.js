@@ -3,9 +3,9 @@ const { decryptData, encryptData } = require('./backendHelper');
 
 const axios = require('axios');
 
-const API_URL = 'https://judge0-ce.p.rapidapi.com/submissions';
-const API_KEY = 'be3f268cf2mshfd6d50bab0643b4p1f7246jsn1ffe3f8ea652';
-const API_HOST = 'judge0-ce.p.rapidapi.com';
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 /**
  * Compile and execute code
@@ -34,13 +34,13 @@ const codeSubmissionHandler = async (req, res) => {
             //API for create submission
             const data = await axios.default.request({
                 method: 'POST',
-                url: API_URL,
+                url: process.env.API_URL,
                 params: { base64_encoded: "true", fields: "*" },
                 headers: {
                     "content-type": "application/json",
                     "Content-Type": "application/json",
-                    "X-RapidAPI-Host": API_HOST,
-                    "X-RapidAPI-Key": API_KEY
+                    "X-RapidAPI-Host": process.env.API_HOST,
+                    "X-RapidAPI-Key": process.env.API_KEY
                 },
                 data: {
                     language_id,
@@ -48,24 +48,23 @@ const codeSubmissionHandler = async (req, res) => {
                     stdin: stdin ? Buffer.from(stdinDecrypted, 'utf-8').toString('base64').toString('base64') : null
                 }
             })
-            apiTokenForSubmissionReq = data?.token;
+            apiTokenForSubmissionReq = data?.data?.token;
         } else {
             apiTokenForSubmissionReq = tokenDecrypted;
         }
-
         //API call for Get Submission
         const submissionsResponse = await axios.default.request({
             method: 'GET',
-            url: API_URL + '/' + apiTokenForSubmissionReq,
+            url: process.env.API_URL + '/' + apiTokenForSubmissionReq,
             params: { base64_encoded: true, fields: "*" },
             headers: {
-                "X-RapidAPI-Host": API_HOST,
-                "X-RapidAPI-Key": API_KEY
+                "X-RapidAPI-Host": process.env.API_HOST,
+                "X-RapidAPI-Key": process.env.API_KEY
             }
         })
 
         submissionsResponse.data['token'] = submissionsResponse.data['token'];
-        return res.status(200).json({ status: 'succcess', message: 'Execution completed', data: submissionsResponse.data });
+        return res.status(200).json({ status: 'success', message: 'Execution completed', data: submissionsResponse.data });
     } catch (error) {
         console.log('[codeSubmissionHandler]', error);
         return res.status(500).json({ status: 'failure', message: 'Internal server error', error: error.message });

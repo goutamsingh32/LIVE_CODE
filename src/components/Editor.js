@@ -8,20 +8,42 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setCodeReducer, setLanguageReducer, setThemeReducer } from '../slice';
 import toast from 'react-hot-toast';
 import { submitCode } from '../service';
-
+import { setLocalStorage, getFromLocalStorage } from '../service';
+import { spaceChildren } from 'antd/es/button';
+import { Buffer } from 'buffer'
 const { TextArea } = Input
 
 const Editor = ({ socketRef, roomId, onCodeChange }) => {
 
-  const dispatch = useDispatch();
-
   const [language, setLanguage] = useState(languageOptions[0]);
   const [theme, setTheme] = useState(availableThemes[0]);
-  const [code, setCode] = useState("//Write your code here");
+  const [code, setCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isCompilationAllowed, setIsCompilationAllowed] = useState(false);
   const [customInput, setCustomInput] = useState(null);
   const [outputDetails, setOutputDetails] = useState(null);
+
+  useEffect(() => {
+    try {
+      const savedLanguage = getFromLocalStorage('language');
+      if (savedLanguage) {
+        setLanguage(JSON.parse(savedLanguage));
+      };
+    } catch (err) {
+      console.log('error in getlanguage from LocalStrage')
+    }
+
+    try {
+      const savedTheme = getFromLocalStorage('theme');
+      if (savedTheme) {
+        setTheme(JSON.parse(savedTheme));
+      }
+    } catch (err) {
+      console.log('error in getTheme from localstorage')
+    }
+
+    setCode(getFromLocalStorage('code'));
+  }, []);
 
   //Listen to CODE_CHANGE event from server
   useEffect(() => {
@@ -54,7 +76,7 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
    */
   const handleLanguageChange = (selectedLanguage) => {
     setLanguage(selectedLanguage);
-    dispatch(setLanguageReducer(selectedLanguage)); //TODO
+    setLocalStorage('language', JSON.stringify(selectedLanguage));
   }
 
   /**
@@ -63,7 +85,7 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
    */
   const handleThemeChange = (selectedTheme) => {
     setTheme(selectedTheme);
-    dispatch(setThemeReducer(selectedTheme)); //TODO
+    setLocalStorage('theme', JSON.stringify(selectedTheme));
   }
 
   /**
@@ -72,7 +94,7 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
    */
   const handleCodeChange = (value) => {
     setCode(value);
-    // dispatch(setCodeReducer(value)); //TODO
+    setLocalStorage('code', value);
     if (socketRef) {
       socketRef.current.emit(ACTIONS.CODE_CHANGE, {
         roomId,
@@ -105,10 +127,9 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
       {
         loading: 'Processing ⏳',
         success: (apiResponse) => {
-          console.log('apiResponse', apiResponse)
           const submissionsResponse = apiResponse?.data;
           if (submissionsResponse && submissionsResponse.status == 'success') {
-            const submissionOutput = submissionsResponse; //TODO
+            const submissionOutput = submissionsResponse?.data; //TODO
             const statusId = submissionOutput?.status?.id;
             if (statusId === 1 || statusId === 2) {
               //Still processing
@@ -141,34 +162,37 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
     * Generate UI changes based on code execution results
     */
   const getCodeExecutionResult = () => {
+    console.log('statusId', outputDetails);
     const statusId = outputDetails?.status?.id;
+    console.log('statusId', statusId);
     if (statusId === 6) {
-      const compilationErr = atob(outputDetails?.compile_output);
+      const compilationErr = Buffer.from(outputDetails?.compile_output, 'base64').toString();
       // compilation error
       return (
-        <pre className="text-red-500">
+        <div className="text-red-500">
           {compilationErr ? `${compilationErr}` : null}
-        </pre>
+        </div>
       );
     } else if (statusId === 3) {
-      const output = atob(outputDetails.stdout);
+      const output = Buffer.from(outputDetails?.stdout, 'base64').toString();
+      console.log('output', output);
       return (
-        <pre className="text-green-500">
+        <div className="text-green-500">
           {output !== null ? `${output}` : null}
-        </pre>
+        </div>
       );
     } else if (statusId === 5) {
       return (
-        <pre className="text-red-500">
+        <div className="text-red-500">
           {`Time Limit Exceeded`}
-        </pre>
+        </div>
       );
     } else {
-      const stdErr = atob(outputDetails?.stderr);
+      const stdErr = Buffer.from(outputDetails?.stderr, 'base64').toString();
       return (
-        <pre className="text-red-500">
+        <div className="text-red-500">
           {stdErr ? `${stdErr}` : null}
-        </pre>
+        </div>
       );
     }
   }
@@ -186,7 +210,8 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
             showSearch
             style={{ width: '220px' }}
             options={languageOptions}
-            onChange={(_, language) => handleLanguageChange(language)} //TODO optionFilterProp
+            optionFilterProp="children"
+            onChange={(_, language) => handleLanguageChange(language)}
             filterOption={filterLanguageOptions}
           />
 
@@ -234,12 +259,12 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
           </span>
         </div>
         <div className='outputResult'>
-          <>{outputDetails ? getCodeExecutionResult : null}</>
+          <>{outputDetails ? getCodeExecutionResult() : null}</>
         </div>
         <div className='customInput'>
           <TextArea
-            // value={customInput}
-            // onChange={(e) => setCustomInput(e.target.value)}
+            value={customInput}
+            onChange={(e) => setCustomInput(e.target.value)}
             placeholder="Custom input"
             autoSize={{ minRows: 3, maxRows: 6 }}
           />

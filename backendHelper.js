@@ -1,15 +1,15 @@
 const { enc, AES, format } = require("crypto-js");
+const dotenv = require('dotenv');
 
-REACT_APP_ENCRYPTION_KEY = "encryption-key"
-REACT_APP_ENCRYPTION_IV = "encryptionIV-key"
+dotenv.config();
 
 /**
  * Encrypt input data
  * @param {string} data 
  */
 const encryptData = (data) => {
-    const encryptionKey = enc.Base64.parse(REACT_APP_ENCRYPTION_KEY);
-    const encryptionIV = enc.Base64.parse(REACT_APP_ENCRYPTION_IV);
+    const encryptionKey = enc.Base64.parse(process.env.REACT_APP_ENCRYPTION_KEY);
+    const encryptionIV = enc.Base64.parse(process.env.REACT_APP_ENCRYPTION_IV);
     const wordArray = enc.Utf16.parse(data);
 
     return AES.encrypt(wordArray, encryptionKey, { iv: encryptionIV }).toString(format.Hex);
@@ -21,8 +21,8 @@ const encryptData = (data) => {
  */
 const decryptData = (data) => {
     if (!data) return data;
-    const encryptionKey = enc.Base64.parse(REACT_APP_ENCRYPTION_KEY);
-    const encryptionIV = enc.Base64.parse(REACT_APP_ENCRYPTION_IV);
+    const encryptionKey = enc.Base64.parse(process.env.REACT_APP_ENCRYPTION_KEY);
+    const encryptionIV = enc.Base64.parse(process.env.REACT_APP_ENCRYPTION_IV);
 
     return AES.decrypt(format.Hex.parse(data), encryptionKey, { iv: encryptionIV }).toString(enc.Utf16);
 }

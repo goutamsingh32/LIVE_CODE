@@ -1,4 +1,4 @@
-const { enc, AES, format } =  require("crypto-js");
+const { enc, AES, format } = require("crypto-js");
 
 
 /**
@@ -25,4 +25,4 @@ const decryptData = (data) => {
     return AES.decrypt(format.Hex.parse(data), encryptionKey, { iv: encryptionIV }).toString(enc.Utf16);
 }
 
-module.exports =  { decryptData, encryptData }
+module.exports = { decryptData, encryptData }

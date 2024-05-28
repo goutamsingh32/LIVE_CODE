@@ -177,9 +177,10 @@ footer a:hover {
 
 
 /* New css */
-.editorWrap{
+.editorWrap {
   background-color: #1a1e34;
 }
+
 .editor-wrapper {
   display: flex;
 }
@@ -214,7 +215,8 @@ footer a:hover {
   font-weight: 600;
   cursor: pointer;
 }
-.compile-btn:hover{
+
+.compile-btn:hover {
   background-color: #6abd68;
 }
 
@@ -233,6 +235,7 @@ footer a:hover {
   font-weight: 600;
   color: #f8f8f2;
 }
+
 .outputDetails {
   /* margin-top: 20px; */
   font-size: 20px;

@@ -3,7 +3,7 @@ import { languageOptions } from './utils/constant';
 import { availableThemes } from './utils/constant';
 
 const initialState = {
-    code: '',
+    code: "//Write your code here",
     languageId: languageOptions[0],
     theme: availableThemes[0],
 }
@@ -12,13 +12,13 @@ const EditorSlice = createSlice({
     name: 'editor',
     initialState,
     reducers: {
-        setCodeReducer(state, action) {
+        setCodeReducer: (state, action) => {
             state.code = action.payload;
         },
-        setLanguageReducer(state, action) {
+        setLanguageReducer: (state, action) => {
             state.languageId = action.payload;
         },
-        setThemeReducer(state, action) {
+        setThemeReducer: (state, action) => {
             state.theme = action.payload;
         }
     }

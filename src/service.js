@@ -29,7 +29,6 @@ export const getFromLocalStorage = function (key) {
   if (!key) return null;
 
   const keyEncrypted = encryptData(typeof key == 'string' ? key : key?.toString());
-
   return decryptData(localStorage.getItem(keyEncrypted));
 }
 
@@ -39,9 +38,7 @@ export const getFromLocalStorage = function (key) {
  */
 export const removeFromLocalStorage = function (key) {
   if (!key) return null;
-
   const keyEncrypted = encryptData(typeof key == 'string' ? key : key?.toString());
-
   return localStorage.removeItem(keyEncrypted);
 }
 
@@ -53,7 +50,7 @@ export const removeFromLocalStorage = function (key) {
 export const setLocalStorage = function (key, value) {
   if (!(key && value)) return;
   const keyEncrypted = encryptData(typeof key == 'string' ? key : key?.toString());
-  const valueEncrypted = encryptData(typeof value == 'string' ? key : key?.toString());
+  const valueEncrypted = encryptData(typeof value == 'string' ? value : value?.toString());
 
   localStorage.setItem(keyEncrypted, valueEncrypted);
 }

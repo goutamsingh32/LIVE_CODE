@@ -1,6 +1,5 @@
 const ACTIONS = require('./Actions');
 
-
 /**
  * Handler for all socket related operations
  * @param {import('socket.io').Server} io 

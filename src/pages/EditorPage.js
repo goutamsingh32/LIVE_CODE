@@ -72,6 +72,7 @@ const EditorPage = () => {
       socketRef.current.off(ACTIONS.JOINED);
       socketRef.current.off(ACTIONS.DISCONNECTED);
       socketRef.current.disconnect();
+      clearLocalStorage();
     }
   }, []);
 
@@ -87,13 +88,15 @@ const EditorPage = () => {
   }
 
   function leaveRoom() {
-    removeFromLocalStorage('theme');
-    removeFromLocalStorage('code');
-    removeFromLocalStorage('language');
+    clearLocalStorage();
     reactNavigator('/');
 
   }
-
+  function clearLocalStorage(){
+    removeFromLocalStorage('theme');
+    removeFromLocalStorage('code');
+    removeFromLocalStorage('language');
+  }
   if (!location.state) {
     return <Navigate to='/' />
   }

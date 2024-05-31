@@ -1,5 +1,6 @@
 import { decryptData, encryptData } from './utils/helper.js';
 import axios from 'axios';
+const BackendURL = 'https://live-code-qghx.onrender.com';
 
 export const submitCode = async ({ language_id, source_code, stdin, token }) => {
   try {
@@ -11,7 +12,7 @@ export const submitCode = async ({ language_id, source_code, stdin, token }) => 
     }
     const resp = await axios.request({
       method: 'POST',
-      url: 'http://localhost:5000/compile',
+      url: `${BackendURL}/compile`,
       data: payload
     })
     return resp;
